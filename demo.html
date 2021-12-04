@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>S-E QR Code</title>
+
+  <style>
+    html {
+      height: 100%;
+      font-family: sans-serif;
+    }
+
+    body {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      height: calc(100% - 100px);
+      margin: 50px 0;
+      background-color: rgb(17, 160, 65);
+    }
+
+    *, :after, :before {
+      box-sizing: border-box;
+    }
+
+    main {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    main section {
+      min-width: 250px;
+      max-width: 50%;
+      height: 100%;
+      text-align: center;
+    }
+
+    main img {
+      box-shadow: 0 0 10px 5px rgb(6, 0, 0);
+    }
+
+    main form {
+      padding: 25px 0 50px 0;
+      text-align: left;
+    }
+
+    main form label {
+      display: block;
+      margin-top: 10px;
+      color: rgb(254, 252, 252);
+      font-weight: normal;
+    }
+
+    main form input,
+    main form select {
+      width: 100%;
+    }
+
+    main form input:invalid {
+      outline: 2px solid #f00;
+      color: #f00;
+    }
+  </style>
+</head>
+    <body>
+      <header>
+        <img height="80" width="1024" src="../qrcdegenerator/2019.SE.Triangle.White.png"> 
+        <h1 style="color: white; margin: 30px;position:static;">Qr Code generator for Schneider-Electric</h1>
+      </header>
+    <main>
+      
+      <section>
+        <img id="qrious">
+
+        <form autocomplete="off">
+          <label>
+            Value
+            <input type="text" name="value" value="QRious" spellcheck="false">
+          </label>
+
+          <label>
+            QR Code size  '100 in = 2540 mm'
+            <input type="number" name="size" placeholder="100" min="100" max="1000" value="200">
+          </label>
+
+          <label>
+            Quiet area  '8 = 1 framing module'
+            <input type="number" name="padding" placeholder="Auto" min="0">
+          </label>
+
+          <label>
+            Error Correction Level  'M = target'
+            <select name="level">
+              <option value="L">L - 7% damage</option>
+              <option value="M">M - 15% damage</option>
+              <option value="Q">Q - 25% damage</option>
+              <option value="H">H - 30% damage</option>
+            </select>
+          </label>
+
+          <label>
+            Background color
+            <input type="color" name="background" value="#ffffff">
+          </label>
+          
+          <label>
+            Background contrast
+            <input type="number" name="backgroundAlpha" placeholder="1" min="0" max="1" step="0.1" value="1">
+          </label>
+          
+          <label>
+            Modules color
+            <input type="color" name="foreground" value="#000000">
+          </label>
+
+          <label>
+            Modules contrast
+            <input type="number" name="foregroundAlpha" placeholder="1" min="0" max="1" step="0.1" value="1">
+          </label>
+        </form>
+      </section>
+    </main>
+
+    <script src="./dist/qrious.js"></script>
+    <script>
+      (function() {
+        var $background = document.querySelector('main form [name="background"]');
+        var $backgroundAlpha = document.querySelector('main form [name="backgroundAlpha"]');
+        var $foreground = document.querySelector('main form [name="foreground"]');
+        var $foregroundAlpha = document.querySelector('main form [name="foregroundAlpha"]');
+        var $level = document.querySelector('main form [name="level"]');
+        var $section = document.querySelector('main section');
+        var $padding = document.querySelector('main form [name="padding"]');
+        var $size = document.querySelector('main form [name="size"]');
+        var $value = document.querySelector('main form [name="value"]');
+
+        var qr = window.qr = new QRious({
+          element: document.getElementById('qrious'),
+          size: 200,
+          value: 'https://www.go2se.com/ref=XXXXXXXXXX/sn=XXXXXXXXXXX/'
+        });
+
+        $background.addEventListener('change', function() {
+          qr.background = $background.value || null;
+        });
+
+        $backgroundAlpha.addEventListener('change', function() {
+          qr.backgroundAlpha = $backgroundAlpha.value || null;
+        });
+
+        $foreground.addEventListener('change', function() {
+          qr.foreground = $foreground.value || null;
+        });
+
+        $foregroundAlpha.addEventListener('change', function() {
+          qr.foregroundAlpha = $foregroundAlpha.value || null;
+        });
+
+        $level.addEventListener('change', function() {
+          qr.level = $level.value;
+        });
+
+        $padding.addEventListener('change', function() {
+          if ($padding.validity.valid) {
+            qr.padding = $padding.value !== '' ? $padding.value : null;
+          }
+        });
+
+        $size.addEventListener('change', function() {
+          if (!$size.validity.valid) {
+            return;
+          }
+
+          qr.size = $size.value || null;
+
+          $section.style.minWidth = qr.size + 'px';
+        });
+
+        $value.value = 'https://www.go2se.com/ref=XXXXXXXXXX/sn=XXXXXXXXXXX/';
+        $value.addEventListener('input', function() {
+          qr.value = $value.value;
+        });
+      })();
+    </script>
+    </body>
+</html>
