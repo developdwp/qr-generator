@@ -1,8 +1,8 @@
-# qr-generator
+# QR CODE GENERATOR
 First qrcode adaptation
 
 <p align="center">
-<img src="../qr-generator/developdwp_qrcode.png"width="300" height="300">
+<img src="../developdwp_qrcode.png"width="300" height="300">
 </p>
 <br>
 
